@@ -1,51 +1,26 @@
 package ru.netology.manager;
+
 import ru.netology.domain.Book;
 import ru.netology.domain.Smartphone;
 import ru.netology.domain.Product;
+import ru.netology.repository.ProductRepository;
 
 public class ProductManager {
 
-    private Product[] items = new Product[0];
+    private ProductRepository repository;
 
-    //добавить элементы
-    public void add (Product item) {
-        int length = items.length + 1;
-        Product[] tmp = new Product[length];
-        System.arraycopy(items, 0, tmp, 0, items.length);
-        int lastIndex = tmp.length - 1;
-        tmp[lastIndex] = item;
-        items = tmp;
+    public ProductManager(ProductRepository repository) {
+        this.repository = repository;
     }
-    //выдать все элементы
-    public Product[] findAll() {
-        return items;
+
+    public void add(Product product) {
+        repository.add(product);
     }
-    //найти по ид элемент
-    public Product findById(int id) {
-        for (Product item : items) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
-    }
-  //метод удаления по ид элемента
-    public void removeById(int id) {
-        int length = items.length - 1;
-        Product[] tmp = new Product[length];
-        int index = 0;
-        for (Product item : items) {
-            if (item.getId() != id) {
-                tmp[index] = item;
-                index++;
-            }
-        }
-        items = tmp;
-    }
-   //метод поиска
+
+    //метод поиска
     public Product[] searchBy(String text) {
         Product[] result = new Product[0];
-        for (Product product : findAll()) {
+        for (Product product : repository.findAll()) {
             if (matches(product, text)) {
                 Product[] tmp = new Product[result.length + 1];
                 System.arraycopy(result, 0, tmp, 0, result.length);
